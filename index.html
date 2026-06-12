@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Felix Vo — Data Science, Pipelines, AI, Research</title>
+<meta name="description" content="Hoang Bao Long (Felix) Vo. Data Science student building across data engineering, AI products, and machine learning research.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#0E1F17;
+  --pine:#16352A;
+  --moss:#2F5A45;
+  --sage:#7FA88C;
+  --beige:#E8E0CF;
+  --cream:#F4EFE3;
+  --gold:#C9A86A;
+  --line:rgba(127,168,140,.20);
+  --maxw:1140px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--forest);
+  color:var(--beige);
+  font-family:"Instrument Sans",system-ui,sans-serif;
+  font-size:17px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+/* ---------- type ---------- */
+.eyebrow{
+  font-family:"JetBrains Mono",monospace;
+  font-size:12.5px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--sage);
+}
+h2{
+  font-family:"Fraunces",serif;
+  font-weight:600;
+  font-size:clamp(30px,4.4vw,46px);
+  line-height:1.05;
+  color:var(--cream);
+  letter-spacing:-.01em;
+}
+h3{
+  font-family:"Fraunces",serif;
+  font-weight:500;
+  font-size:22px;
+  color:var(--cream);
+}
+
+/* ---------- nav ---------- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  backdrop-filter:blur(10px);
+  background:rgba(14,31,23,.62);
+  border-bottom:1px solid transparent;
+  transition:border-color .4s ease, background .4s ease;
+}
+nav.scrolled{border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{font-family:"JetBrains Mono",monospace;font-size:14px;letter-spacing:.04em;color:var(--cream)}
+.brand b{color:var(--gold)}
+.nav-links{display:flex;gap:30px}
+.nav-links a{
+  font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--sage);
+  transition:color .25s ease;position:relative;
+}
+.nav-links a:hover{color:var(--cream)}
+@media(max-width:720px){.nav-links{display:none}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden}
+#graph{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
+.hero-glow{
+  position:absolute;z-index:0;width:60vw;height:60vw;
+  right:-10vw;top:-10vw;border-radius:50%;
+  background:radial-gradient(circle, rgba(47,90,69,.35), transparent 62%);
+  filter:blur(20px);pointer-events:none;
+}
+.hero-inner{position:relative;z-index:2;padding-top:64px}
+.hero .status{display:inline-flex;align-items:center;gap:9px;margin-bottom:26px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 0 rgba(201,168,106,.6);animation:pulse 2.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(201,168,106,.55)}70%{box-shadow:0 0 0 11px rgba(201,168,106,0)}100%{box-shadow:0 0 0 0 rgba(201,168,106,0)}}
+.hero h1{
+  font-family:"Fraunces",serif;font-weight:600;
+  font-size:clamp(46px,8.5vw,104px);line-height:.96;
+  letter-spacing:-.025em;color:var(--cream);
+  max-width:14ch;
+}
+.hero h1 .accent{color:var(--gold);font-style:italic;font-weight:500}
+.hero .lede{
+  margin-top:30px;max-width:46ch;font-size:clamp(18px,2.2vw,21px);
+  color:var(--beige);
+}
+.hero .lede b{color:var(--cream);font-weight:600}
+.hero-cta{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap}
+.btn{
+  font-family:"JetBrains Mono",monospace;font-size:13px;letter-spacing:.02em;
+  padding:13px 22px;border-radius:2px;transition:all .25s ease;display:inline-flex;align-items:center;gap:9px;
+}
+.btn-solid{background:var(--cream);color:var(--forest);font-weight:500}
+.btn-solid:hover{background:var(--gold);transform:translateY(-2px)}
+.btn-ghost{border:1px solid var(--moss);color:var(--beige)}
+.btn-ghost:hover{border-color:var(--sage);background:rgba(47,90,69,.18);transform:translateY(-2px)}
+.scroll-hint{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;
+  font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;color:var(--sage);
+  text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.scroll-hint .bar{width:1px;height:34px;background:linear-gradient(var(--sage),transparent);animation:drop 2s ease-in-out infinite}
+@keyframes drop{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ---------- section frame ---------- */
+section{position:relative;padding:120px 0}
+.sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:54px;flex-wrap:wrap}
+.sec-head .num{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--gold)}
+.sec-head .lead-line{flex:1;height:1px;background:var(--line);align-self:center;min-width:40px}
+
+/* ---------- tracks ---------- */
+.tracks{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+@media(max-width:880px){.tracks{grid-template-columns:1fr}}
+.track{
+  background:var(--pine);border:1px solid var(--line);border-radius:6px;
+  padding:34px 30px 30px;position:relative;overflow:hidden;
+  transition:transform .35s ease,border-color .35s ease;
+}
+.track::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),transparent);transform:scaleX(0);transform-origin:left;
+  transition:transform .45s ease;
+}
+.track:hover{transform:translateY(-6px);border-color:var(--moss)}
+.track:hover::before{transform:scaleX(1)}
+.track .tnum{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--sage);letter-spacing:.1em}
+.track h3{margin:16px 0 12px}
+.track p{font-size:15.5px;color:var(--beige);margin-bottom:22px}
+.track ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.track li{font-size:14px;color:var(--beige);padding-left:18px;position:relative;line-height:1.5}
+.track li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--moss)}
+.track li b{color:var(--cream);font-weight:600}
+
+/* ---------- experience timeline ---------- */
+.timeline{position:relative;padding-left:30px}
+.timeline::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.xp{position:relative;padding-bottom:56px}
+.xp:last-child{padding-bottom:0}
+.xp::before{
+  content:"";position:absolute;left:-29px;top:7px;width:11px;height:11px;border-radius:50%;
+  background:var(--forest);border:2px solid var(--moss);transition:all .3s ease;
+}
+.xp:hover::before{border-color:var(--gold);box-shadow:0 0 0 5px rgba(201,168,106,.12)}
+.xp .xp-top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;flex-wrap:wrap}
+.xp .role{font-family:"Fraunces",serif;font-size:21px;font-weight:600;color:var(--cream)}
+.xp .when{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--gold);white-space:nowrap}
+.xp .org{font-size:15px;color:var(--sage);margin:4px 0 16px;font-weight:500}
+.xp .org span{color:var(--beige)}
+.xp ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.xp li{font-size:15px;color:var(--beige);padding-left:18px;position:relative}
+.xp li::before{content:"+";position:absolute;left:0;top:0;color:var(--moss);font-family:"JetBrains Mono",monospace;font-size:14px}
+.xp li b{color:var(--cream);font-weight:600}
+
+/* ---------- numbers ---------- */
+.numbers{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--pine)}
+.num-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+@media(max-width:760px){.num-grid{grid-template-columns:repeat(2,1fr)}}
+.stat{padding:46px 26px;border-right:1px solid var(--line);position:relative}
+.stat:last-child{border-right:none}
+@media(max-width:760px){.stat:nth-child(2n){border-right:none}.stat{border-bottom:1px solid var(--line)}}
+.stat .big{font-family:"Fraunces",serif;font-size:clamp(34px,4.6vw,52px);font-weight:600;color:var(--gold);line-height:1}
+.stat .cap{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--sage);margin-top:12px;letter-spacing:.04em;line-height:1.5}
+
+/* ---------- stack ---------- */
+.stack-group{margin-bottom:34px}
+.stack-group:last-child{margin-bottom:0}
+.stack-group .label{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px}
+.tags{display:flex;flex-wrap:wrap;gap:10px}
+.tag{
+  font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--beige);
+  padding:8px 15px;border:1px solid var(--line);border-radius:2px;background:rgba(47,90,69,.10);
+  transition:all .25s ease;
+}
+.tag:hover{border-color:var(--gold);color:var(--cream);background:rgba(201,168,106,.08)}
+
+/* ---------- recognition ---------- */
+.rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:760px){.rec-grid{grid-template-columns:1fr}}
+.rec-col{background:var(--pine);border:1px solid var(--line);border-radius:6px;padding:32px 30px}
+.rec-col h3{margin-bottom:22px;font-size:19px}
+.rec-item{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
+.rec-item:last-child{border-bottom:none}
+.rec-item .name{font-size:15px;color:var(--beige)}
+.rec-item .name b{color:var(--cream);font-weight:600}
+.rec-item .src{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--sage);white-space:nowrap}
+
+/* ---------- footer ---------- */
+footer{padding:110px 0 60px;border-top:1px solid var(--line);position:relative;text-align:center}
+footer h2{margin-bottom:24px}
+footer .sub{max-width:40ch;margin:0 auto 38px;color:var(--beige)}
+.contact-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:54px}
+.foot-meta{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--sage);display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
+.foot-meta a:hover{color:var(--cream)}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.3,1),transform .7s cubic-bezier(.2,.7,.3,1)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .dot,.scroll-hint .bar{animation:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top">felix<b>.</b>vo</a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#stack">Stack</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <canvas id="graph"></canvas>
+  <div class="hero-glow"></div>
+  <div class="wrap hero-inner">
+    <div class="status">
+      <span class="dot"></span>
+      <span class="eyebrow">Winnipeg, MB &nbsp;/&nbsp; Open to 2026 internships</span>
+    </div>
+    <h1>Felix Vo builds where data turns into <span class="accent">decisions</span>.</h1>
+    <p class="lede">Data Science student at the University of Manitoba, working across <b>data engineering</b>, <b>AI products</b>, and <b>machine learning research</b>. I build the pipelines, the products, and the models that sit on top of them.</p>
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="#work">See the work</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/felixvo7/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scroll</span><span class="bar"></span></div>
+</header>
+
+<main>
+
+<section id="work">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="num">01</span>
+      <span class="eyebrow">Three things I build</span>
+      <span class="lead-line"></span>
+    </div>
+    <div class="tracks">
+
+      <article class="track reveal">
+        <div class="tnum">/ data engineering</div>
+        <h3>Single sources of truth</h3>
+        <p>One clean place for data that used to live in twenty. Then the pipelines that keep it honest.</p>
+        <ul>
+          <li>Built a CRM for VietHope that pulls <b>20+ sources</b> into a single source of truth across <b>5000+ donor and partner records</b>.</li>
+          <li>Stood up Azure SQL with ETL that lifted data quality <b>20%</b> through deduplication and standardization.</li>
+          <li>Automated SAP cost, P&amp;L, and reporting pipelines at Sanofi, cutting runs to <b>under 10 seconds</b>.</li>
+        </ul>
+      </article>
+
+      <article class="track reveal">
+        <div class="tnum">/ ai products</div>
+        <h3>AI students can trust</h3>
+        <p>Explainable by default, safe at the edges, and built to fit whatever system a campus already runs.</p>
+        <ul>
+          <li>Co-founded and led product for an academic AI tool that reached <b>2000+ users</b> in one semester at 99% reliability.</li>
+          <li>Designed the AI engine, a study plan generator, retrieval augmented policy answers, and multi agent syllabus classification.</li>
+          <li>Secured Asper School of Business funding and reached <b>finalist</b> at the Manitoba AI Innovation Showcase.</li>
+        </ul>
+      </article>
+
+      <article class="track reveal">
+        <div class="tnum">/ ml research</div>
+        <h3>How disease moves</h3>
+        <p>Graph neural networks that learn human mobility, then test whether better movement maps make epidemic models sharper.</p>
+        <ul>
+          <li>Built a gravity and GNN hybrid mobility generator for <b>111 Canadian health regions</b>.</li>
+          <li>Used <b>GATv2 with GRU</b> temporal encoding and mode specific flow calibration.</li>
+          <li>Validated synthetic flows against a gravity baseline using <b>PHAC COVID-19</b> data.</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="num">02</span>
+      <span class="eyebrow">Where I have done it</span>
+      <span class="lead-line"></span>
+    </div>
+    <div class="timeline">
+
+      <div class="xp reveal">
+        <div class="xp-top">
+          <span class="role">Research Assistant</span>
+          <span class="when">Nov 2025 — Present</span>
+        </div>
+        <div class="org">University of Manitoba <span>/ Winnipeg, Canada</span></div>
+        <ul>
+          <li>Developed a gravity and Graph Neural Network hybrid mobility generator for <b>111 Canadian health regions</b> using GATv2 and GRU temporal encoding with mode specific flow calibration.</li>
+          <li>Validated GNN refined synthetic flows against a gravity baseline for metapopulation epidemic accuracy, using PHAC COVID-19 data to study spatial and temporal outbreak dynamics.</li>
+        </ul>
+      </div>
+
+      <div class="xp reveal">
+        <div class="xp-top">
+          <span class="role">Data Analytics Engineer</span>
+          <span class="when">Jul 2025 — Present</span>
+        </div>
+        <div class="org">VietHope Inc. <span>/ Covina, CA, US</span></div>
+        <ul>
+          <li>Built CRM systems aggregating <b>20+ sources</b> into a single source of truth for <b>5000+ donor and partner records</b>.</li>
+          <li>Built Azure SQL and ETL pipelines that improved data quality <b>20%</b>, enabling real time grant and donor tracking.</li>
+          <li>Built Looker dashboards with dynamic filters for pipeline visibility, removing manual reporting.</li>
+        </ul>
+      </div>
+
+      <div class="xp reveal">
+        <div class="xp-top">
+          <span class="role">Business Data Science &amp; A2R Trainee</span>
+          <span class="when">May 2025 — Oct 2025</span>
+        </div>
+        <div class="org">Sanofi Aventis <span>/ Southeast Asia and India, Remote</span></div>
+        <ul>
+          <li>Built and deployed a sell out forecasting model for <b>5 Diabetes SKUs</b> at <b>5 to 10% MAPE</b> and 0.1% variance to budget, informing 2026 sales planning across Southeast Asia and India.</li>
+          <li>Automated cost allocation, P&amp;L reporting, and SAP pipelines, cutting processing to <b>under 10 seconds</b>.</li>
+          <li>Consolidated financial data across <b>6+ legal entities</b> with Power BI and supported audit closure.</li>
+        </ul>
+      </div>
+
+      <div class="xp reveal">
+        <div class="xp-top">
+          <span class="role">Co-Founder, Head of Product &amp; AI</span>
+          <span class="when">Jun 2025 — Present</span>
+        </div>
+        <div class="org">Absolutely Amazing People <span>/ Winnipeg, Canada</span></div>
+        <ul>
+          <li>Took the product from concept to launch, secured Asper School of Business funding, validated fit with <b>300+ student surveys</b>, and scaled to <b>2000+ users</b> in the first semester at 99% reliability.</li>
+          <li>Architected an AI system around explainability and safety, with a study plan engine, retrieval augmented policy answers, safe escalation rules, and multi agent syllabus classification.</li>
+          <li>Built an LMS agnostic, configurable go to market for institutional deployment. Recognized as a <b>finalist</b> at the Manitoba AI Innovation Showcase.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="numbers reveal" style="padding:0">
+  <div class="wrap">
+    <div class="num-grid">
+      <div class="stat"><div class="big">5000+</div><div class="cap">donor and partner<br>records unified</div></div>
+      <div class="stat"><div class="big">2000+</div><div class="cap">users in one<br>semester</div></div>
+      <div class="stat"><div class="big">111</div><div class="cap">health regions<br>modeled</div></div>
+      <div class="stat"><div class="big">5–10%</div><div class="cap">forecast MAPE<br>at Sanofi</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="num">03</span>
+      <span class="eyebrow">The stack</span>
+      <span class="lead-line"></span>
+    </div>
+    <div class="reveal">
+      <div class="stack-group">
+        <div class="label">Languages and tools</div>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">R</span><span class="tag">SQL</span>
+          <span class="tag">Java</span><span class="tag">C / C++</span><span class="tag">VBA</span>
+          <span class="tag">Excel</span><span class="tag">Power BI</span><span class="tag">Looker</span><span class="tag">Git</span>
+        </div>
+      </div>
+      <div class="stack-group">
+        <div class="label">Cloud and platforms</div>
+        <div class="tags">
+          <span class="tag">Google Cloud</span><span class="tag">Azure</span><span class="tag">SAP</span>
+          <span class="tag">Salesforce CRM</span><span class="tag">Docker</span>
+        </div>
+      </div>
+      <div class="stack-group">
+        <div class="label">Modeling and AI</div>
+        <div class="tags">
+          <span class="tag">GATv2 + GRU</span><span class="tag">Graph Neural Nets</span><span class="tag">Forecasting</span>
+          <span class="tag">RAG</span><span class="tag">Multi-agent</span><span class="tag">ETL</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="recognition">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="num">04</span>
+      <span class="eyebrow">Certifications and competitions</span>
+      <span class="lead-line"></span>
+    </div>
+    <div class="rec-grid">
+      <div class="rec-col reveal">
+        <h3>Certifications</h3>
+        <div class="rec-item"><span class="name"><b>IBM Data Science</b> Professional Certificate</span><span class="src">IBM · 2025</span></div>
+        <div class="rec-item"><span class="name"><b>Google Cloud</b> Data Analytics Specialization</span><span class="src">Google · 2025</span></div>
+        <div class="rec-item"><span class="name"><b>Financial Analysis &amp; Modeling</b> Certificate</span><span class="src">CFI · 2025</span></div>
+        <div class="rec-item"><span class="name"><b>Data Science</b> Professional Certificate</span><span class="src">KNIME · 2025</span></div>
+      </div>
+      <div class="rec-col reveal">
+        <h3>Competitions</h3>
+        <div class="rec-item"><span class="name"><b>2nd place</b>, 5-Hour Innovation Pitch Competition</span><span class="src">2025</span></div>
+        <div class="rec-item"><span class="name"><b>14th</b>, Capture the Flag Cybersecurity</span><span class="src">2025</span></div>
+        <div class="rec-item"><span class="name"><b>Finalist</b>, Manitoba AI Innovation Showcase</span><span class="src">MAAIP</span></div>
+        <div class="rec-item"><span class="name"><b>B.Sc. Data Science</b>, Minor Economics</span><span class="src">U Manitoba · 2027</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Let us build something</span>
+      <h2 style="margin-top:18px">Always up for a good data problem.</h2>
+      <p class="sub">Reach out about internships, research, or anything that needs cleaner data and sharper models.</p>
+      <div class="contact-row">
+        <a class="btn btn-solid" href="mailto:felixv.work@outlook.com">felixv.work@outlook.com</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/felixvo7/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+    <div class="foot-meta">
+      <span>Hoang Bao Long (Felix) Vo</span>
+      <a href="tel:+14315572611">(431) 557 2611</a>
+      <span>Winnipeg, MB</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// nav border on scroll
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30));
+
+// reveal on scroll
+const io=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// ---------- hero node graph ----------
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const canvas=document.getElementById('graph');
+const ctx=canvas.getContext('2d');
+let W,H,nodes=[],raf;
+const COUNT=window.innerWidth<700?26:46;
+const LINK=150;
+
+function size(){
+  const dpr=Math.min(devicePixelRatio||1,2);
+  W=canvas.clientWidth;H=canvas.clientHeight;
+  canvas.width=W*dpr;canvas.height=H*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+function init(){
+  nodes=[];
+  for(let i=0;i<COUNT;i++){
+    nodes.push({
+      x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,
+      r:Math.random()*1.8+1.1,
+      gold:Math.random()<.16
+    });
+  }
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  // edges
+  for(let i=0;i<nodes.length;i++){
+    for(let j=i+1;j<nodes.length;j++){
+      const a=nodes[i],b=nodes[j];
+      const dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
+      if(d<LINK){
+        const o=(1-d/LINK)*.30;
+        ctx.strokeStyle='rgba(127,168,140,'+o+')';
+        ctx.lineWidth=.7;
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+      }
+    }
+  }
+  // nodes
+  for(const n of nodes){
+    ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    ctx.fillStyle=n.gold?'rgba(201,168,106,.95)':'rgba(127,168,140,.7)';
+    ctx.fill();
+    if(n.gold){
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r+3.5,0,Math.PI*2);
+      ctx.strokeStyle='rgba(201,168,106,.25)';ctx.lineWidth=1;ctx.stroke();
+    }
+    n.x+=n.vx;n.y+=n.vy;
+    if(n.x<0||n.x>W)n.vx*=-1;
+    if(n.y<0||n.y>H)n.vy*=-1;
+  }
+  raf=requestAnimationFrame(draw);
+}
+function start(){size();init();if(!reduce){cancelAnimationFrame(raf);draw();}else{drawStatic();}}
+function drawStatic(){ // single frame for reduced motion
+  for(const n of nodes){n.vx=0;n.vy=0;}
+  ctx.clearRect(0,0,W,H);
+  for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
+    const a=nodes[i],b=nodes[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(d<LINK){ctx.strokeStyle='rgba(127,168,140,'+(1-d/LINK)*.25+')';ctx.lineWidth=.7;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+  }
+  for(const n of nodes){ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle=n.gold?'rgba(201,168,106,.9)':'rgba(127,168,140,.6)';ctx.fill();}
+}
+addEventListener('resize',()=>{clearTimeout(window._rz);window._rz=setTimeout(start,200);});
+start();
+</script>
+</body>
+</html>
